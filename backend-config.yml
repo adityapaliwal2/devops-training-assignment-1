@@ -4,7 +4,4 @@ metadata :
   name : backend-config 
 data :
   DB_HOST: postgres
-  DB_USER: postgres
-  DB_PASSWORD: postgres123
-  DB_DATABASE: todolist
   DB_PORT: "5432"

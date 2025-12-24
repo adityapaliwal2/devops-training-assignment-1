@@ -18,13 +18,11 @@ spec:
           image: postgres:16
           ports:
             - containerPort: 5432
-          env:
-            - name: POSTGRES_DB
-              value: todolist
-            - name: POSTGRES_USER
-              value: postgres
-            - name: POSTGRES_PASSWORD
-              value: postgres123
+          envFrom:
+             - configMapRef:
+                 name: db-config
+             - secretRef:
+                 name: db-secret
           volumeMounts:
             - name: postgres-data
               mountPath: /var/lib/postgresql/data
