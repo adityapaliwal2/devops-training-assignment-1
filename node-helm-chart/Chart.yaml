@@ -1,0 +1,11 @@
+apiVersion: v2
+
+name: Nodejs-app
+
+description: A Helm chart for deploying any application
+
+type: application
+
+version: 0.1.0
+
+appVersion: "1.16.0"

@@ -1,0 +1,47 @@
+{{- if .Values.postgres.enabled }}
+{{- include "postgres.validateMode" . }}
+{{- if .Values.postgres.mode.statefulset }}
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Release.Name }}-postgres
+spec:
+  serviceName: {{ .Values.postgres.service.name }}
+  replicas: {{ .Values.postgres.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.postgres.label }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.postgres.label }}
+    spec:
+      containers:
+        - name: postgres
+          image: {{ .Values.postgres.container.image.name }}
+          ports:
+            - containerPort: {{ .Values.postgres.container.port }}
+          envFrom:
+            - secretRef:
+                name: {{ .Values.postgres.auth.name }}
+{{- if .Values.postgres.persistence.enabled }}
+          volumeMounts:
+            - name: postgres-data
+              mountPath: /var/lib/postgresql/data
+{{- end }}
+
+{{- if .Values.postgres.persistence.enabled }}
+  volumeClaimTemplates:
+    - metadata:
+        name: postgres-data
+      spec:
+        accessModes:
+          - {{ .Values.postgres.persistence.accessMode }}
+        resources:
+          requests:
+            storage: {{ .Values.postgres.persistence.size }}
+{{- end }}
+
+{{- end }}
+{{- end }}

@@ -1,0 +1,22 @@
+nginx:
+  replicas: 1
+  label: nginx 
+  container:
+    name: nginx-container
+    image:
+      name: nginx:latest
+      pullPolicy: IfNotPresent
+    port: 80
+  service:
+    name: nginx-service
+    type: NodePort
+    port: 80
+    targetport: 80  
+    nodeport: 30060
+  config:
+    host: postgres
+    port: 5432
+  secret:
+    user: cG9zdGdyZXM=
+    password: cG9zdGdyZXMxMjM=
+    database: dG9kb2xpc3Q=

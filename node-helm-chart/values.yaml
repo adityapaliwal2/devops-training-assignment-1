@@ -1,0 +1,58 @@
+backend:
+  enabled: true
+  mode:
+    deployment: true
+    statefulset: false
+
+  replicas: 3
+  label: backend
+  container:
+    name: todo-backend
+    image:
+      repository: adityapaliwal1/todo-backend
+      pullPolicy: IfNotPresent
+    port: 3000
+  service:
+    name: backend-service
+    type: NodePort
+    port: 3000
+    targetport: 3000
+    nodeport: 30080
+  config:
+    name: backend-config
+    host: postgres
+    port: 5432
+  secret:
+    name: backend-secret
+    user: cG9zdGdyZXM=
+    password: cG9zdGdyZXMxMjM=
+    database: dG9kb2xpc3Q=
+
+postgres:
+  enabled: true
+  mode:
+    deployment: false
+    statefulset: true
+
+  replicas: 1
+  label: postgres
+  container:
+    name: database
+    image:
+      name: postgres:16
+      pullPolicy: IfNotPresent
+    port: 5432
+  service:
+    name: postgres
+    type: None
+    port: 5432
+    targetport: 5432
+  persistence:
+    enabled: true
+    accessMode: ReadWriteOnce
+    size: 1Gi
+  auth:
+    name: db-secret
+    username: cG9zdGdyZXM=
+    password: cG9zdGdyZXMxMjM=
+    database: dG9kb2xpc3Q=
